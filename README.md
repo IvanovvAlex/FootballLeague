@@ -1,5 +1,9 @@
 # FootballLeague
 
+## ⚠️ Edit `appsettings.json` File
+
+> **Important**: Ensure the `appsettings.json` file is updated with your custom configuration or the app will not run.
+
 ## Overview
 
 The **FootballLeague** project is a modular and scalable .NET 8 solution for managing football leagues. It adheres to clean architecture principles and includes components for API, data management, domain logic, shared utilities, and unit tests.
