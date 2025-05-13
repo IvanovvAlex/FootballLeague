@@ -7,8 +7,8 @@ using Microsoft.Data.SqlClient; // For SqlConnection
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Retrieve connection string
-string? connectionString = builder.Configuration.GetConnectionString("DbConnnectionString");
-
+string? connectionString = builder.Configuration.GetConnectionString("DbConnnectionString")
+    ?? builder.Configuration["ConnectionStrings:DbConnnectionString"];
 if (string.IsNullOrEmpty(connectionString))
 {
     Console.WriteLine("Warning: Connection string is missing. The app will not run, please provide a connection string in the appsettings.json file.");
