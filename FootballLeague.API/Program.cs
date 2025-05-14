@@ -16,23 +16,6 @@ if (string.IsNullOrEmpty(connectionString))
 }
 else
 {
-    // Validate the connection string
-    try
-    {
-        using (SqlConnection sqlConnection = new SqlConnection(connectionString))
-        {
-            sqlConnection.Open();
-            Console.WriteLine("Database connection successful.");
-            sqlConnection.Close();
-        }
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Error: Unable to connect to the database. Please check your connection string. Details: {ex.Message}");
-        return;
-    }
-
-    // Register services
     builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseSqlServer(connectionString));
 
@@ -47,11 +30,8 @@ else
 
     app.UseMiddleware<ExceptionHandlerMiddleware>();
 
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
+    app.UseSwagger();
+    app.UseSwaggerUI();
 
     // Ensure the database is created
     using (IServiceScope scope = app.Services.CreateScope())
@@ -63,7 +43,12 @@ else
         await dataSeeder.SeedAsync();
     }
 
-    app.UseHttpsRedirection();
+    app.UseStaticFiles();
+    app.MapControllers();
+
+    app.UseRouting();
+    app.UseAuthorization();
+
     app.MapControllers();
 
     app.Run();

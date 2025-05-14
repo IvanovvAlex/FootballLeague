@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    platform: linux/amd64
+    container_name: sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=TheHardestPass123
+      - MSSQL_PID=Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserverdata:/var/opt/mssql
+
+  footballleague-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: footballleague-api
+    ports:
+      - "5080:5080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DbConnnectionString=Server=sqlserver;Database=test;User Id=SA;Password=TheHardestPass123;TrustServerCertificate=True;
+    depends_on:
+      - sqlserver
+
+volumes:
+  sqlserverdata:
